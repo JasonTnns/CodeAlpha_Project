@@ -1,0 +1,132 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class HotelReservationSystem {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Room> rooms = new ArrayList<>();
+
+        // Add rooms to the system
+        rooms.add(new Room("Standard", 100));
+        rooms.add(new Room("Deluxe", 150));
+        rooms.add(new Room("Executive", 200));
+
+        while (true) {
+            System.out.println("Welcome to the Hotel Reservation System");
+            System.out.println("1. Search for available rooms");
+            System.out.println("2. Make a reservation");
+            System.out.println("3. View booking details");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice (1-4): ");
+
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    searchRooms(rooms);
+                    break;
+                case 2:
+                    makeReservation(rooms, scanner);
+                    break;
+                case 3:
+                    viewBookingDetails(scanner);
+                    break;
+                case 4:
+                    System.out.println("Thank you for using the Hotel Reservation System");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+
+            System.out.println();
+        }
+    }
+
+    public static void searchRooms(ArrayList<Room> rooms) {
+        System.out.println("Available Rooms:");
+        for (Room room : rooms) {
+            if (!room.isBooked()) {
+                System.out.println(room);
+            }
+        }
+    }
+
+    public static void makeReservation(ArrayList<Room> rooms, Scanner scanner) {
+        System.out.print("Enter the room type (Standard, Deluxe, Executive): ");
+        String roomType = scanner.next();
+
+        for (Room room : rooms) {
+            if (room.getType().equalsIgnoreCase(roomType) && !room.isBooked()) {
+                System.out.print("Enter the number of nights: ");
+                int numNights = scanner.nextInt();
+
+                double totalCost = room.getPrice() * numNights;
+                System.out.println("Total cost: $" + totalCost);
+
+                System.out.print("Enter payment amount: ");
+                double paymentAmount = scanner.nextDouble();
+
+                if (paymentAmount >= totalCost) {
+                    room.setBooked(true);
+                    System.out.println("Reservation successful");
+                } else {
+                    System.out.println("Insufficient payment. Reservation failed");
+                }
+
+                return;
+            }
+        }
+
+        System.out.println("No available rooms of the specified type");
+    }
+
+    public static void viewBookingDetails(Scanner scanner) {
+        System.out.print("Enter the reservation ID: ");
+        String reservationID = scanner.next();
+        // Retrieve and display booking details based on the reservation ID
+        // (This part is not implemented in this example)
+        System.out.println("Booking details not available");
+    }
+
+    @Override
+    public String toString() {
+        return "HotelReservationSystem []";
+    }
+}
+
+class Room {
+    private String type;
+    private double price;
+    private boolean isBooked;
+
+    public Room(String type, double price) {
+        this.type = type;
+        this.price = price;
+        this.isBooked = false;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public boolean isBooked() {
+        return isBooked;
+    }
+
+    public void setBooked(boolean booked) {
+        isBooked = booked;
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "type='" + type + '\'' +
+                ", price=" + price +
+                ", isBooked=" + isBooked +
+                '}';
+    }
+}
